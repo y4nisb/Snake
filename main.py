@@ -12,6 +12,7 @@ GREEN = (34, 139, 34)
 SPACE = 50
 sx = 0
 sy = 0
+
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 #Setup
 pygame.init()
@@ -22,12 +23,14 @@ pygame.display.set_caption('Snake')
 
 
 
+
+
 def drawGrid():
     blockSize = 50
-    for x in range(0, WIDTH, blockSize):
-        for y in range(0, HEIGHT, blockSize):
+    for x in range(0, WIDTH , blockSize):
+        for y in range(0, HEIGHT , blockSize):
             rect = pygame.Rect(x, y, blockSize, blockSize)
-            pygame.draw.rect(SCREEN, WHITE, rect, 1)
+            pygame.draw.rect(SCREEN, BLACK, rect, 1)
 
 food_position = None
 
@@ -50,6 +53,11 @@ def drawSnake():
         rect = pygame.Rect(sx, sy, SPACE, SPACE)
         SCREEN.fill(GREEN, rect)
 
+def displayScore(Score):
+    font = pygame.font.SysFont(None, 36)  # You can change this to your preferred font and size.
+    score_text = font.render("Score: " + str(Score), True, WHITE)
+    SCREEN.blit(score_text, (10, 10))  # Display the score on the top-left corner
+
 def hallo():
     print("hallo")
 
@@ -59,7 +67,7 @@ def moveSnake():
 
     if keys[pygame.K_w] and sy > 0:
         sy -= SPACE
-        time.sleep(0.2)
+        time.sleep(0.1)
     elif keys[pygame.K_s] and sy < HEIGHT - SPACE:
         sy += SPACE
         time.sleep(0.2)
@@ -69,6 +77,21 @@ def moveSnake():
     elif keys[pygame.K_d] and sx < WIDTH - SPACE:
         sx += SPACE
         time.sleep(0.2)
+Score = 0
+def checkIfOnFood():
+    global food_position, Score
+    global sx, sy
+
+
+    if(food_position[0] == sx and food_position[1] == sy):
+
+        Score += 1
+        food_position = None
+        drawFood()
+    displayScore(Score)
+
+def moveFood():
+    global Score
 
 
 while running:
@@ -76,18 +99,20 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    # Clear screen
+
     SCREEN.fill(BLACK)
 
-    # Update snake position based on key presses
+
     moveSnake()
 
-    # Draw everything
+
     drawGrid()
+
     drawFood()
     drawSnake()
+    checkIfOnFood()
+    #isplayScore(0)
 
-    # Update the display
     pygame.display.update()
 
     clock.tick(60)
