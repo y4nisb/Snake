@@ -4,17 +4,22 @@ import pygame
 import random
 
 #Konstanten
+
 WIDTH, HEIGHT = 400, 400
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (34, 139, 34)
 SPACE = 50
+
+#Globalen
 sx = 0
 sy = 0
 
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
+
 #Setup
+
 pygame.init()
 clock = pygame.time.Clock()
 running = True
@@ -30,11 +35,13 @@ def drawGrid():
     for x in range(0, WIDTH , blockSize):
         for y in range(0, HEIGHT , blockSize):
             rect = pygame.Rect(x, y, blockSize, blockSize)
-            pygame.draw.rect(SCREEN, BLACK, rect, 1)
+            pygame.draw.rect(SCREEN, WHITE, rect, 1)
+
 
 food_position = None
 
 def generate_food_position():
+    # ändern falls Schlange länger wird
     x1 = random.randint(0, (WIDTH/SPACE)-1) * SPACE
     y1 = random.randint(0, (HEIGHT / SPACE) - 1) * SPACE
     return x1, y1
@@ -54,12 +61,9 @@ def drawSnake():
         SCREEN.fill(GREEN, rect)
 
 def displayScore(Score):
-    font = pygame.font.SysFont(None, 36)  # You can change this to your preferred font and size.
+    font = pygame.font.SysFont(None, 36)
     score_text = font.render("Score: " + str(Score), True, WHITE)
-    SCREEN.blit(score_text, (10, 10))  # Display the score on the top-left corner
-
-def hallo():
-    print("hallo")
+    SCREEN.blit(score_text, (10, 10))
 
 def moveSnake():
     global sx, sy
@@ -67,7 +71,7 @@ def moveSnake():
 
     if keys[pygame.K_w] and sy > 0:
         sy -= SPACE
-        time.sleep(0.1)
+        time.sleep(0.2)
     elif keys[pygame.K_s] and sy < HEIGHT - SPACE:
         sy += SPACE
         time.sleep(0.2)
@@ -90,11 +94,10 @@ def checkIfOnFood():
         drawFood()
     displayScore(Score)
 
-def moveFood():
-    global Score
 
 
-while Score < 50:
+
+while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
